@@ -1,6 +1,6 @@
 # yatardiff
 
-Yet-Another tar-diff tool.
+Yet-another Tar-Diff tool.
 
 It expands two tar files in some temporary directory,
 then compares the directories with `diff` command,
@@ -16,33 +16,27 @@ Usage:
 
 All options will be passed through to `diff` command.
 
-## Tutorial
+## Mini tutorial
 
 ```sh
 $ mkdir d
 $ cd d
-$ echo a > a.txt
-$ echo b > b.txt
-$ mkdir sub
-$ echo "sub's c" > sub/c.txt
+$ echo A > A.txt
+$ echo B > B.txt
 $ tar zcvf ../d-1.tar.gz *
-a.txt
-b.txt
-sub/
-sub/c.txt
-$ echo B > b.txt
+A.txt
+B.txt
+$ echo BB > B.txt
 $ tar zcvf ../d-2.tar.gz *
-a.txt
-b.txt
-sub/
-sub/c.txt
+A.txt
+B.txt
 $ cd ..
 $ yatardiff -r d-1.tar.gz d-2.tar.gz
-diff -r a/a.txt b/a.txt
+diff -r a/B.txt b/B.txt
 1c1
-< b
+< B
 ---
-> B
+> BB
 ```
 
 
