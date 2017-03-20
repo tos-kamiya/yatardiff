@@ -38,7 +38,8 @@ __doc__ = """{f}: diff between two .tar files.
 Recognized tar file extensions are: {extensions}
 
 Usage:
-  {f} [--git] -r <options>... <tar1> <tar2>
+  {f} -r <options>... <tar1> <tar2>
+  {f} --git <options>... <tar1> <tar2>
 
 Options:
   --git     Use `git diff` instead of `diff`.

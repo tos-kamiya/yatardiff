@@ -13,8 +13,12 @@ Recognized tar file extensions are: .tar, .tgz, .tar.gz, .tar.bz2, .tbz, .tbz2, 
 
 Usage:
   yatardiff -r options... tar1 tar2
+  yatardiff --git options... tar1 tar2
 
-All options will be passed through to `diff` command.
+Options:
+  --git     Use `git diff` instead of `diff`.
+
+All the other options will be passed through to `diff` command.
 
 ## Mini tutorial
 
