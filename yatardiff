@@ -11,7 +11,7 @@ import tempfile
 
 EXTENSIONS = [
     ".tar", ".tgz", ".tar.gz", ".tar.bz2", ".tbz", ".tbz2",
-    ".tar.xz", ".tar.lzma", ".tlz", ".tar.Z", 
+    ".tar.xz", ".tar.lzma", ".tlz", ".tar.Z",
 ]
 
 
@@ -28,7 +28,7 @@ __doc__ = """{f}: diff between two .tar files.
 Recognized tar file extensions are: {extensions}
 
 Usage:
-  {f} <options>... <tar1> <tar2>
+  {f} -r <options>... <tar1> <tar2>
 
 All options will be passed through to `diff` command.
 """.format(f=path.basename(__file__), extensions=', '.join(EXTENSIONS))
@@ -39,7 +39,7 @@ def main(argv):
     if not args:
         print(__doc__)
         return
-    
+
     options = []
     tar_files = []
     for a in args:
@@ -66,5 +66,3 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv)
-
-
