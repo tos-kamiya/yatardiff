@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
 version = '0.1'
 
 setup(
-    name='inc_with',
+    name='yatardiff',
     version=version,
     install_requires=requirements,
     author='Toshihiro Kamiya',
