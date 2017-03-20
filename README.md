@@ -37,10 +37,21 @@ b.txt
 sub/
 sub/c.txt
 $ cd ..
-$ yatardiff/yatardiff -r d-1.tar.gz d-2.tar.gz
+$ yatardiff -r d-1.tar.gz d-2.tar.gz
 diff -r a/a.txt b/a.txt
 1c1
 < b
 ---
 > B
 ```
+
+
+## Installation
+
+Run `sudo pip3 install git+https://github.com/tos-kamiya/yatardiff` .
+A script `yatardiff` will be copied in a directory for executables, such as `/usr/local/bin/`.
+
+## License
+
+Public Domain.
+
