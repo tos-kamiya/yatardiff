@@ -24,19 +24,17 @@ All the other options will be passed through to `diff` command.
 
 ```sh
 $ mkdir d
-$ cd d
-$ echo A > A.txt
-$ echo B > B.txt
-$ tar zcvf ../d-1.tar.gz *
-A.txt
-B.txt
-$ echo BB > B.txt
-$ tar zcvf ../d-2.tar.gz *
-A.txt
-B.txt
-$ cd ..
+$ echo A > d/A.txt
+$ echo B > d/B.txt
+$ tar zcvf d-1.tar.gz d/*
+d/A.txt
+d/B.txt
+$ echo BB > d/B.txt
+$ tar zcvf d-2.tar.gz d/*
+d/A.txt
+d/B.txt
 $ yatardiff -r d-1.tar.gz d-2.tar.gz
-diff -r a/B.txt b/B.txt
+diff -r a/d/B.txt b/d/B.txt
 1c1
 < B
 ---
