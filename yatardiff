@@ -76,6 +76,9 @@ def main(argv):
 
     if len(tar_files) != 2:
         sys.exit("error: must specify two tar files")
+    for t in tar_files:
+        if not path.isfile(t):
+            sys.exit("error: no such file: %s" % t)
 
     with temp_directory() as temp_dir:
         dira = path.join(temp_dir, 'a')
