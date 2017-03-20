@@ -49,6 +49,12 @@ All the other options will be passed through to `diff` command.
 
 
 def main(argv):
+    def do_mkdir_and_expand(dira, tara):
+        os.mkdir(dira)
+        exit_code = subprocess.call(['tar', 'xf', tara, '-C', dira])
+        if exit_code != 0:
+            sys.exit(exit_code)
+
     args = argv[1:]
     if not args:
         print(__doc__)
@@ -74,10 +80,10 @@ def main(argv):
     with temp_directory() as temp_dir:
         dira = path.join(temp_dir, 'a')
         dirb = path.join(temp_dir, 'b')
-        os.mkdir(dira)
-        os.mkdir(dirb)
-        subprocess.check_call(['tar', 'xf', tar_files[0], '-C', dira])
-        subprocess.check_call(['tar', 'xf', tar_files[1], '-C', dirb])
+
+        do_mkdir_and_expand(dira, tar_files[0])
+        do_mkdir_and_expand(dirb, tar_files[1])
+
         with changing_dir(temp_dir):
             diff = ['git', 'diff'] if option_git else ['diff']
             exit_code = subprocess.call(diff + options + ['a', 'b'])
