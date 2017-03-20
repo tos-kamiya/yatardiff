@@ -34,6 +34,17 @@ def temp_directory():
         shutil.rmtree(name)
 
 
+@contextmanager
+def archive_mount(dira, tara):
+    exit_code = subprocess.call(['archivemount', tara, dira])
+    if exit_code != 0:
+        sys.exit(exit_code)
+    try:
+        yield
+    finally:
+        subprocess.call(['fusermount', '-u', dira])
+
+
 __doc__ = """{f}: diff between two .tar files.
 Recognized tar file extensions are: {extensions}
 
@@ -49,12 +60,6 @@ All the other options will be passed through to `diff` command.
 
 
 def main(argv):
-    def do_mkdir_and_expand(dira, tara):
-        os.mkdir(dira)
-        exit_code = subprocess.call(['tar', 'xf', tara, '-C', dira])
-        if exit_code != 0:
-            sys.exit(exit_code)
-
     args = argv[1:]
     if not args:
         print(__doc__)
@@ -82,15 +87,16 @@ def main(argv):
 
     with temp_directory() as temp_dir:
         dira = path.join(temp_dir, 'a')
+        os.mkdir(dira)
         dirb = path.join(temp_dir, 'b')
+        os.mkdir(dirb)
 
-        do_mkdir_and_expand(dira, tar_files[0])
-        do_mkdir_and_expand(dirb, tar_files[1])
-
-        with changing_dir(temp_dir):
-            diff = ['git', 'diff'] if option_git else ['diff']
-            exit_code = subprocess.call(diff + options + ['a', 'b'])
-        sys.exit(exit_code)
+        with archive_mount(dira, tar_files[0]):
+            with archive_mount(dirb, tar_files[1]):
+                with changing_dir(temp_dir):
+                    diff = ['git', 'diff'] if option_git else ['diff']
+                    exit_code = subprocess.call(diff + options + ['a', 'b'])
+                sys.exit(exit_code)
 
 
 if __name__ == '__main__':

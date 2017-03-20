@@ -51,6 +51,8 @@ B [-B-]{+C+}
 
 ## Installation
 
+Prerequisites: diff (or git), fusermount, archivemount, and python3.
+
 Run `sudo pip3 install git+https://github.com/tos-kamiya/yatardiff` .
 A script `yatardiff` will be copied in a directory for executables, such as `/usr/local/bin/`.
 
