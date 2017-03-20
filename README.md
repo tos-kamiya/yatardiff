@@ -11,12 +11,12 @@ and finally remove the all files expanded in the temporary directory.
 yatardiff: diff between two .tar files.
 Recognized tar file extensions are: .tar, .tgz, .tar.gz, .tar.bz2, .tbz, .tbz2, .tar.xz, .tar.lzma, .tlz, .tar.Z
 
-Usage:
-  yatardiff -r options... tar1 tar2
-  yatardiff --git options... tar1 tar2
+Usage:  
+  yatardiff -r options... tar1 tar2  
+  yatardiff --git options... tar1 tar2  
 
-Options:
-  --git     Use `git diff` instead of `diff`.
+Options:  
+  --git     Use `git diff` instead of `diff`.  
 
 All the other options will be passed through to `diff` command.
 
