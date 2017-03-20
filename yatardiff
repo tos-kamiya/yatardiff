@@ -16,6 +16,16 @@ EXTENSIONS = [
 
 
 @contextmanager
+def changing_dir(d):
+    curdir = os.getcwd()
+    os.chdir(d)
+    try:
+        yield
+    finally:
+        os.chdir(curdir)
+
+
+@contextmanager
 def temp_directory():
     name = tempfile.mkdtemp()
     try:
@@ -60,7 +70,8 @@ def main(argv):
         os.mkdir(dirb)
         subprocess.check_call(['tar', 'xf', tar_files[0], '-C', dira])
         subprocess.check_call(['tar', 'xf', tar_files[1], '-C', dirb])
-        exit_code = subprocess.call(['diff'] + options + [dira, dirb])
+        with changing_dir(temp_dir):
+            exit_code = subprocess.call(['diff'] + options + ['a', 'b'])
         sys.exit(exit_code)
 
 

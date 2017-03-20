@@ -38,7 +38,7 @@ sub/
 sub/c.txt
 $ cd ..
 $ yatardiff/yatardiff -r d-1.tar.gz d-2.tar.gz
-diff -r /tmp/tmpqqcpbqmk/a/b.txt /tmp/tmpqqcpbqmk/b/b.txt
+diff -r a/a.txt b/a.txt
 1c1
 < b
 ---
