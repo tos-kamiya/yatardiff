@@ -5,7 +5,7 @@ from setuptools import setup
 with open('requirements.txt') as f:
     requirements = [L for L in f.read().splitlines() if not L.startswith('#')]
 
-version = '0.3.1'
+version = '0.3.2'
 
 setup(
     name='yatardiff',
