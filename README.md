@@ -2,9 +2,9 @@
 
 Yet-another Tar-Diff tool.
 
-It expands two tar files in some temporary directory,
+It mounts (or expands) two tar files in a temporary directory,
 then compares the directories with `diff` command,
-and finally remove the all files expanded in the temporary directory.
+and finally remove the temporary directory.
 
 ## Usage
 
@@ -17,6 +17,7 @@ Usage:
 
 Options:  
   --git     Use `git diff` instead of `diff`.  
+  --tar     Use `tar` to expand files to temporary directory.
 
 All the other options will be passed through to `diff` command.
 

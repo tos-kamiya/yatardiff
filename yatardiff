@@ -45,6 +45,14 @@ def archive_mount(dira, tara):
         subprocess.call(['fusermount', '-u', dira])
 
 
+@contextmanager
+def archive_expand(dira, tara):
+    exit_code = subprocess.call(['tar', 'xf', tara, '-C', dira])
+    if exit_code != 0:
+        sys.exit(exit_code)
+    yield
+
+
 __doc__ = """{f}: diff between two .tar files.
 Recognized tar file extensions are: {extensions}
 
@@ -54,6 +62,7 @@ Usage:
 
 Options:
   --git     Use `git diff` instead of `diff`.
+  --tar     Use `tar` to expand files to temporary directory.
 
 All the other options will be passed through to `diff` command.
 """.format(f=path.basename(__file__), extensions=', '.join(EXTENSIONS))
@@ -65,6 +74,7 @@ def main(argv):
         print(__doc__)
         return
 
+    option_tar = False
     option_git = False
     options = []
     tar_files = []
@@ -76,6 +86,8 @@ def main(argv):
         else:
             if a == '--git':
                 option_git = True
+            elif a == '--tar':
+                option_tar = True
             else:
                 options.append(a)
 
@@ -91,8 +103,9 @@ def main(argv):
         dirb = path.join(temp_dir, 'b')
         os.mkdir(dirb)
 
-        with archive_mount(dira, tar_files[0]):
-            with archive_mount(dirb, tar_files[1]):
+        mount_func = archive_expand if option_tar else archive_mount
+        with mount_func(dira, tar_files[0]):
+            with mount_func(dirb, tar_files[1]):
                 with changing_dir(temp_dir):
                     diff = ['git', 'diff'] if option_git else ['diff']
                     exit_code = subprocess.call(diff + options + ['a', 'b'])
