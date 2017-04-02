@@ -5,16 +5,16 @@ from setuptools import setup
 with open('requirements.txt') as f:
     requirements = [L for L in f.read().splitlines() if not L.startswith('#')]
 
-version = '0.3.2'
+version = '0.4'
 
 setup(
-    name='yatardiff',
+    name='ytdiff',
     version=version,
     install_requires=requirements,
     author='Toshihiro Kamiya',
     author_email='kamiya@mgj.nifty.com',
-    scripts=['yatardiff'],
-    url='https://github.com/tos-kamiya/yatardiff/',
+    scripts=['ytdiff'],
+    url='https://github.com/tos-kamiya/ytdiff/',
     license='Public Domain',
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -25,4 +25,3 @@ setup(
     ],
     description='Run command with giving parameters incrementally',
 )
-
