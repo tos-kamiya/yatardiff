@@ -8,6 +8,7 @@ and finally remove the temporary directory.
 
 ## Usage
 
+```
 ytdiff: diff between two .tar files.
 Recognized tar file extensions are: .tar, .tgz, .tar.gz, .tar.bz2, .tbz, .tbz2, .tar.xz, .tar.lzma, .tlz, .tar.Z
 
@@ -20,6 +21,7 @@ Options:
   --tar     Use `tar` to expand files to temporary directory.
 
 All the other options will be passed through to `diff` command.
+```
 
 ## Mini tutorial
 
@@ -59,8 +61,10 @@ B [-B-]{+C+}
 
 Prerequisites: diff (or git), fusermount, archivemount, and python3.
 
-Run `sudo pip3 install git+https://github.com/tos-kamiya/ytdiff` .
+To install, run `sudo pip3 install git+https://github.com/tos-kamiya/ytdiff` .
 A script `ytdiff` will be copied in a directory for executables, such as `/usr/local/bin/`.
+
+To uninstall run `sudo pip3 uninstall ytdiff` .
 
 ## License
 
