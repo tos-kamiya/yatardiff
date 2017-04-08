@@ -9,24 +9,26 @@ and finally remove the temporary directory.
 ## Usage
 
 ```
-ytdiff: diff between two .tar files.
-Recognized tar file extensions are: .tar, .tgz, .tar.gz, .tar.bz2, .tbz, .tbz2, .tar.xz, .tar.lzma, .tlz, .tar.Z
+ytdiff: Diff between two .tar files.
+Recognized tar file extensions are: {extensions}
 
-Usage:  
-  ytdiff -r options... tar1 tar2  
-  ytdiff --git options... tar1 tar2  
+Usage:
+  {f} -r <options>... <tar1> <tar2>
+  {f} --git <options>... <tar1> <tar2>
+  {f} <options>... <gzip1> <gzip2>
 
-Options:  
-  --git     Use `git diff` instead of `diff`.  
-  --tar     Use `tar` to expand files to temporary directory.
+Options:
+  --git     Use `git diff` instead of `diff`.
+  -r        Recursive option, passed through to diff command.
 
 All the other options will be passed through to `diff` command.
 ```
 
 ## Mini tutorial
 
+Let make two directories to be compared as follows:
+
 ```sh
-$ # prepare two directories
 $ rm -rf d
 $ mkdir d
 $ echo A > d/A.txt
@@ -38,16 +40,22 @@ $ echo B C > d/B.txt
 $ tar zcvf d-2.tar.gz d/*
 d/A.txt
 d/B.txt
-$
-$ # compare the directories
+```
+
+Compare the two directories.
+
+```sh
 $ ytdiff -r d-1.tar.gz d-2.tar.gz
 diff -r a/d/B.txt b/d/B.txt
 1c1
 < B B
 ---
 > B C
-$
-$ # compare the directories with git-diff
+```
+
+Compare them with `git diff` command, instead of `diff` command.
+
+````sh
 $ ytdiff --git --word-diff d-1.tar.gz d-2.tar.gz
 diff --git a/a/d/B.txt b/b/d/B.txt
 index 1090f0c..a12ea8a 100644

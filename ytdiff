@@ -15,6 +15,14 @@ EXTENSIONS = [
     ".tar.xz", ".tar.lzma", ".tlz", ".tar.Z",
 ]
 
+EXPAND_TOOL = {
+    '.gz': 'gunzip',
+    '.bz2': 'bunzip2',
+    '.xz': 'unxz',
+    '.lama': 'unlzma',
+    '.Z': 'uncompress',
+}
+
 
 @contextmanager
 def changing_dir(d):
@@ -54,16 +62,17 @@ def archive_expand(dira, tara):
     yield
 
 
-__doc__ = """{f}: diff between two .tar files.
+__doc__ = """{f}: Diff between two .tar files / two .gz files.
 Recognized tar file extensions are: {extensions}
 
 Usage:
   {f} -r <options>... <tar1> <tar2>
   {f} --git <options>... <tar1> <tar2>
+  {f} <options>... <gzip1> <gzip2>
 
 Options:
   --git     Use `git diff` instead of `diff`.
-  --tar     Use `tar` to expand files to temporary directory.
+  -r        Recursive option, passed through to diff command.
 
 All the other options will be passed through to `diff` command.
 """.format(f=path.basename(__file__), extensions=', '.join(EXTENSIONS))
@@ -79,6 +88,7 @@ def main(argv):
     option_git = False
     options = []
     tar_files = []
+    archive_file_and_info_pairs = []
     if not (find_executable('archivemount') and find_executable('fusermount')):
         option_tar = True
         print('> warning: `archivemount` not installed. fallback to use `tar`.', file=sys.stderr)
@@ -88,36 +98,56 @@ def main(argv):
                 tar_files.append(a)
                 break  # for e
         else:
-            if a == '--git':
-                option_git = True
-                if not find_executable('git'):
-                    sys.exit('error: `git` not installed')
-            elif a == '--tar':
-                option_tar = True
-                if not find_executable('tar'):
-                    sys.exit('error: `tar` not installed')
+            for e, t in EXPAND_TOOL.items():
+                if a.endswith(e):
+                    archive_file_and_info_pairs.append((a, e, t))
+                    break  # for e
             else:
-                options.append(a)
+                if a == '--git':
+                    option_git = True
+                    if not find_executable('git'):
+                        sys.exit('error: `git` not installed')
+                else:
+                    options.append(a)
 
-    if len(tar_files) != 2:
-        sys.exit("error: must specify two tar files")
-    for t in tar_files:
+    mode = None
+    if len(tar_files) == 2 and len(archive_file_and_info_pairs) == 0:
+        mode = 'COMPARE_TAR'
+    elif len(tar_files) == 0 and len(archive_file_and_info_pairs) == 2:
+        mode = 'COMPARE_FILE'
+    else:
+        sys.exit("error: must specify two .tar files or two .gz files")
+    for t in tar_files + [a for a, e, t in archive_file_and_info_pairs]:
         if not path.isfile(t):
             sys.exit("error: no such file: %s" % t)
 
-    with temp_directory() as temp_dir:
-        dira = path.join(temp_dir, 'a')
-        os.mkdir(dira)
-        dirb = path.join(temp_dir, 'b')
-        os.mkdir(dirb)
+    if mode == 'COMPARE_TAR':
+        with temp_directory() as temp_dir:
+            dira = path.join(temp_dir, 'a')
+            os.mkdir(dira)
+            dirb = path.join(temp_dir, 'b')
+            os.mkdir(dirb)
 
-        mount_func = archive_expand if option_tar else archive_mount
-        with mount_func(dira, tar_files[0]):
-            with mount_func(dirb, tar_files[1]):
-                with changing_dir(temp_dir):
-                    diff = ['git', 'diff'] if option_git else ['diff']
-                    exit_code = subprocess.call(diff + options + ['a', 'b'])
-                sys.exit(exit_code)
+            mount_func = archive_expand if option_tar else archive_mount
+            with mount_func(dira, tar_files[0]):
+                with mount_func(dirb, tar_files[1]):
+                    with changing_dir(temp_dir):
+                        diff = ['git', 'diff'] if option_git else ['diff']
+                        exit_code = subprocess.call(diff + options + ['a', 'b'])
+                    sys.exit(exit_code)
+    elif mode == 'COMPARE_FILE':
+        with temp_directory() as temp_dir:
+            absas = [path.abspath(a) for a, e, t in archive_file_and_info_pairs]
+            with changing_dir(temp_dir):
+                for orig, (a, e, t) in zip(absas, archive_file_and_info_pairs):
+                    subprocess.check_call(['cp', orig, a])
+                    subprocess.check_call([t, a])
+                diff = ['git', 'diff'] if option_git else ['diff']
+                noefiles = [a[:-len(e)] for a, e, t in archive_file_and_info_pairs]
+                exit_code = subprocess.call(diff + options + noefiles)
+            sys.exit(exit_code)
+    else:
+        assert False
 
 
 if __name__ == '__main__':
