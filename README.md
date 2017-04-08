@@ -13,9 +13,9 @@ ytdiff: Diff between two .tar files.
 Recognized tar file extensions are: {extensions}
 
 Usage:
-  {f} -r <options>... <tar1> <tar2>
-  {f} --git <options>... <tar1> <tar2>
-  {f} <options>... <gzip1> <gzip2>
+  ytdiff -r <options>... <tar1> <tar2>
+  ytdiff --git <options>... <tar1> <tar2>
+  ytdiff <options>... <gzip1> <gzip2>
 
 Options:
   --git     Use `git diff` instead of `diff`.
