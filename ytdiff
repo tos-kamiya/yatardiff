@@ -140,7 +140,9 @@ def main(argv):
             absas = [path.abspath(a) for a, e, t in archive_file_and_info_pairs]
             with changing_dir(temp_dir):
                 for orig, (a, e, t) in zip(absas, archive_file_and_info_pairs):
-                    subprocess.check_call(['cp', orig, a])
+                    if not find_executable(t):
+                        sys.exit('error: `%s` not installed')
+                    shutil.copyfile(orig, a)
                     subprocess.check_call([t, a])
                 diff = ['git', 'diff'] if option_git else ['diff']
                 noefiles = [a[:-len(e)] for a, e, t in archive_file_and_info_pairs]
