@@ -10,7 +10,7 @@ and finally remove the temporary directory.
 
 ```
 ytdiff: Diff between two .tar files.
-Recognized tar file extensions are: {extensions}
+Recognized tar file extensions are: : .tar, .tgz, .tar.gz, .tar.bz2, .tbz, .tbz2, .tar.xz, .tar.lzma, .tlz, .tar.Z
 
 Usage:
   ytdiff -r <options>... <tar1> <tar2>
