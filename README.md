@@ -55,7 +55,7 @@ diff -r a/d/B.txt b/d/B.txt
 
 Compare them with `git diff` command, instead of `diff` command.
 
-````sh
+```sh
 $ ytdiff --git --word-diff d-1.tar.gz d-2.tar.gz
 diff --git a/a/d/B.txt b/b/d/B.txt
 index 1090f0c..a12ea8a 100644
