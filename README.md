@@ -67,7 +67,7 @@ B [-B-]{+C+}
 
 ## Installation
 
-Prerequisites: diff (or git), fusermount, archivemount, and python3.
+Prerequisites: diff (or git), archivemount, and python3. 
 
 To install, run `sudo pip3 install git+https://github.com/tos-kamiya/ytdiff` .
 A script `ytdiff` will be copied in a directory for executables, such as `/usr/local/bin/`.
